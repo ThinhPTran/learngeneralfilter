@@ -1,0 +1,57 @@
+clc
+clear all
+
+// Forward filter
+indata = [    0.2113249  
+    0.7560439  
+    0.0002211  
+    0.3303271  
+    0.6653811  
+    0.6283918  
+    0.8497452  
+    0.6857310  
+    0.8782165  
+    0.0683740 ]
+fil = [1; 1]
+outdata = conv(indata, fil)
+
+indata1 = [    0.2113249  
+    0.7560439  
+    0.0002211  
+    0.3303271  
+    0.6653811  
+    0.6283918  
+    0.8497452  
+    0.6857310  
+    0.8782165  
+    0.0683740 ]
+    
+fill1 = zeros(10, 1)
+fill1(1) = 1
+fill1(2) = 1
+outdata1 = ifft(fft(indata1).*fft(fill1))
+
+// Backward filter
+
+indata2 = ifft((fft(outdata1).*((fft(fill1)').'))./(abs(fft(fill1)).*abs(fft(fill1)) + 0.00001))
+
+// Play with recursive
+// X(z) * (1 + 1z)/(2 + 5z) = Y(z)
+
+tmp1 = zeros(10,1)
+tmp2 = zeros(10,1)
+
+tmp1(1) = 1
+tmp1(2) = 1
+tmp2(1) = 2
+tmp2(2) = 5
+
+ffill3 = fft(tmp1).*((fft(tmp2)').')./(abs(fft(tmp2)).*abs(fft(tmp2)) + 0.00001)
+
+outdata3 = ifft(fft(indata).*ffill3)
+
+
+
+
+
+    
